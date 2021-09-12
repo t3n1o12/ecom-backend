@@ -1,7 +1,8 @@
 import express from 'express'
 import expressAsyncHandler from 'express-async-handler'
-import Product, { Review } from '../models/productModel.js';
+import Product from '../models/productModel.js';
 import multer from 'multer';
+import e from 'express';
 //upload image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,12 +28,63 @@ const productRouter = express.Router();
 //product list
 
 productRouter.post('/list', expressAsyncHandler(async (req, res) => {
-const product = await Product.find({ "userCreate": { "$ne": req.body.userCreate } }).limit(6).sort(req.body.sort?{name:req.body.sort}:null);
-    if(product){
+    if (req.body.search) {
+        const regex = new RegExp(req.body.search, 'i')
+        const product = await Product.find({
+            $or: [
+                {
+                    name: regex
+                },
+                {
+                    category: regex,
+                },
+                {
+                    sdescription: regex,
+                },
+            ]
+        })
+        if(product){
+            return res.send(product)
+        }
+        else{
+            return res.status(404).send('Not found')
+        }
+    }
+    if (req.body.category) {
+        const product = await Product.find({
+            category:req.body.category
+        })
+        if(product){
+            return res.send(product)
+        }
+        else{
+            return res.status(404).send('Not found')
+        }
+    }
+    if (req.body.price) {
+        const product = await Product.find({ price: { $gte:req.body.price[0], $lte: req.body.price[1] } })
+        if(product){
+            return res.send(product)
+        }
+        else{
+            return res.status(404).send('Not found')
+        }
+    }
+    if (req.body.color) {
+        const product = await Product.find({ color:req.body.color })
+        if(product){
+            return res.send(product)
+        }
+        else{
+            return res.status(404).send('Not found')
+        }
+    }
+    const product = await Product.find({ "userCreate": { "$ne": req.body.userCreate } }).limit(12).sort(req.body.sort ? { name: req.body.sort } : null).skip(req.body.skip ? req.body.skip : null);
+    if (product) {
         res.send(product)
     }
-    else{
-        res.status(407).send({message:'Some thing not wrong'})
+    else {
+        res.status(407).send({ message: 'Some thing not wrong' })
     }
 }))
 //add product
@@ -48,7 +100,7 @@ productRouter.post('/add', upload.array('image'), expressAsyncHandler(async (req
         sale: req.body.sale,
         fearture: req.body.fearture,
         description: req.body.description,
-        
+        color:req.body.color
     })
     const createdProduct = await product.save();
     res.send(createdProduct)
@@ -68,7 +120,40 @@ productRouter.get(
         }
     })
 );
+//product search 
+productRouter.post('/search', expressAsyncHandler(async (req, res) => {
+    if (isNaN(req.body.search)) {
+        //not number
+        const regex = new RegExp(req.body.search, 'i')
+        const product = await Product.find({
+            $or: [
+                {
+                    name: regex
+                },
+                {
+                    category: regex,
+                },
+                {
+                    sdescription: regex,
+                },
+            ]
+        })
+        if (product === []) {
+            res.status(403).send({
+                message: 'nothing to show'
+            })
 
+        } else {
+            res.send(product)
+        }
+
+    } else {
+        res.status(403).send({
+            message: 'you cant not search number'
+        })
+    }
+
+}))
 
 
 //add rating for product 

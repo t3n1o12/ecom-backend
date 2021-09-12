@@ -68,7 +68,8 @@ userRouter.post('/signup', expressAsyncHandler(async (req, res) => {
         name: createdUser.name,
         email: createdUser.email,
         userAva: createdUser.userAva,
-        password:createdUser.password
+        password:createdUser.password,
+        role:createdUser.role
     })
 }))
 //user update basic infomation :v

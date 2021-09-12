@@ -72,9 +72,12 @@ const productSchema = new mongoose.Schema({
    description:{
        type:String,
       
+   },
+   color:{
+       type:String
    }
 },{timestamps:true})
 const Product = mongoose.model('Product', productSchema);
-export const Review =  mongoose.model('Review', reviewShema)
+
 
 export default Product;
