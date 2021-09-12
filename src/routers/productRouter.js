@@ -41,7 +41,8 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
                 {
                     sdescription: regex,
                 },
-            ]
+            ],
+            userCreate:req.body.userCreate
         })
         if(product){
             return res.send(product)
@@ -52,7 +53,8 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
     }
     if (req.body.category) {
         const product = await Product.find({
-            category:req.body.category
+            category:req.body.category,
+            userCreate:req.body.userCreate
         })
         if(product){
             return res.send(product)
@@ -62,7 +64,7 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
         }
     }
     if (req.body.price) {
-        const product = await Product.find({ price: { $gte:req.body.price[0], $lte: req.body.price[1] } })
+        const product = await Product.find({ price: { $gte:req.body.price[0], $lte: req.body.price[1] },userCreate:req.body.userCreate })
         if(product){
             return res.send(product)
         }
@@ -71,7 +73,7 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
         }
     }
     if (req.body.color) {
-        const product = await Product.find({ color:req.body.color })
+        const product = await Product.find({ color:req.body.color,userCreate:req.body.userCreate })
         if(product){
             return res.send(product)
         }
@@ -79,7 +81,8 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
             return res.status(404).send('Not found')
         }
     }
-    const product = await Product.find({ "userCreate": { "$ne": req.body.userCreate } }).limit(12).sort(req.body.sort ? { name: req.body.sort } : null).skip(req.body.skip ? req.body.skip : null);
+    //{ "$ne": req.body.userCreate }
+    const product = await Product.find({ "userCreate": req.body.userCreate }).limit(12).sort(req.body.sort ? { name: req.body.sort } : null).skip(req.body.skip ? req.body.skip : null);
     if (product) {
         res.send(product)
     }
