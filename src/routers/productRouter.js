@@ -125,7 +125,8 @@ productRouter.get(
 );
 //product search 
 productRouter.post('/search', expressAsyncHandler(async (req, res) => {
-    if (req.body.search) {
+    if (isNaN(req.body.search)) {
+        //not number
         const regex = new RegExp(req.body.search, 'i')
         const product = await Product.find({
             $or: [
@@ -141,50 +142,19 @@ productRouter.post('/search', expressAsyncHandler(async (req, res) => {
             ],
             userCreate:req.body.userCreate
         })
-        if(product){
-            return res.send(product)
+        if (product === []) {
+            res.status(403).send({
+                message: 'nothing to show'
+            })
+
+        } else {
+            res.send(product)
         }
-        else{
-            return res.status(404).send('Not found')
-        }
-    }
-    if (req.body.category) {
-        const product = await Product.find({
-            category:req.body.category,
-            userCreate:req.body.userCreate
+
+    } else {
+        res.status(403).send({
+            message: 'you cant not search number'
         })
-        if(product){
-            return res.send(product)
-        }
-        else{
-            return res.status(404).send('Not found')
-        }
-    }
-    if (req.body.price) {
-        const product = await Product.find({ price: { $gte:req.body.price[0], $lte: req.body.price[1] },userCreate:req.body.userCreate })
-        if(product){
-            return res.send(product)
-        }
-        else{
-            return res.status(404).send('Not found')
-        }
-    }
-    if (req.body.color) {
-        const product = await Product.find({ color:req.body.color,userCreate:req.body.userCreate })
-        if(product){
-            return res.send(product)
-        }
-        else{
-            return res.status(404).send('Not found')
-        }
-    }
-    //{ "$ne": req.body.userCreate }
-    const product = await Product.find({ "userCreate": req.body.userCreate }).limit(12).sort(req.body.sort ? { name: req.body.sort } : null).skip(req.body.skip ? req.body.skip : null);
-    if (product) {
-        res.send(product)
-    }
-    else {
-        res.status(407).send({ message: 'Some thing not wrong' })
     }
 
 }))
@@ -211,7 +181,14 @@ productRouter.put('/:id/edit',upload.array('image'),expressAsyncHandler(async(re
 }))
 
 //delet a product
-
+productRouter.delete('/:id',expressAsyncHandler(async(req,res)=>{
+     const product = await Product.findByIdAndRemove(req.params.id);
+    if(product){
+        res.send({message:'delete success'})
+    }else{
+        res.send({message:'delete fail'})
+    }
+}))
 //add rating for product 
 ///////////this is for review
 

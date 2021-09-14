@@ -30,11 +30,52 @@ const upload = multer({
 })
 const userRouter = express.Router();
 
+///list customer 
+userRouter.get('/list',expressAsyncHandler(async(req,res)=>{
+    // res.send(req.query)
+    const user = await User.find({
+        role:"User"
+    }).skip(req.query.page?parseInt(req.query.page):0).limit(req.query.limit?parseInt(req.query.limit):null).sort(req.query.sort?{name:parseInt(req.query.sort)}:null)
+    if(user){
+        res.send(user)
+    }
+    else{
+        res.status(404).send({
+            message:'Some thing wrong, user not found'
+        })
+    }
 
+}))
 
-userRouter.get('/seed', expressAsyncHandler(async (req, res) => {
+userRouter.get('/search',expressAsyncHandler(async(req,res)=>{
+    // res.send(req.query)
+   if(!req.query.search){
+       res.send(undefined)
+   }
+    const regex = new RegExp(req.query.search, 'i')
+    const user = await User.find({
+        role:"User",
+        $or: [
+            {
+                name: regex
+            },
+            {
+                email: regex,
+            },
+          
+        ],
+    })
+    if(user){
+        res.send(user)
+    }
+    else{
+        res.status(404).send({
+            message:'Some thing wrong, user not found'
+        })
+    }
 
-}));
+}))
+
 userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({
         email: req.body.email
@@ -122,4 +163,8 @@ userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
         })
     }
 }))
+
+
+
 export default userRouter;
+
