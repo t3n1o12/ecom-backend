@@ -75,7 +75,34 @@ userRouter.get('/search',expressAsyncHandler(async(req,res)=>{
     }
 
 }))
+// search but header
+userRouter.get('/header/search',expressAsyncHandler(async(req,res)=>{
+    // res.send(req.query)
+   if(!req.query.search){
+       res.send(undefined)
+   }
+    const regex = new RegExp(req.query.search, 'i')
+    const user = await User.find({
+        $or: [
+            {
+                name: regex
+            },
+            {
+                email: regex,
+            },
+          
+        ],
+    })
+    if(user){
+        res.send(user)
+    }
+    else{
+        res.status(404).send({
+            message:'Some thing wrong, user not found'
+        })
+    }
 
+}))
 userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({
         email: req.body.email

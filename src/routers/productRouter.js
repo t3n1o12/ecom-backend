@@ -2,7 +2,6 @@ import express from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js';
 import multer from 'multer';
-import e from 'express';
 //upload image
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -141,6 +140,40 @@ productRouter.post('/search', expressAsyncHandler(async (req, res) => {
                 },
             ],
             userCreate:req.body.userCreate
+        })
+        if (product === []) {
+            res.status(403).send({
+                message: 'nothing to show'
+            })
+
+        } else {
+            res.send(product)
+        }
+
+    } else {
+        res.status(403).send({
+            message: 'you cant not search number'
+        })
+    }
+
+}))
+productRouter.get('/header/search', expressAsyncHandler(async (req, res) => {
+    if (isNaN(req.query.search)) {
+        //not number
+        const regex = new RegExp(req.query.search, 'i')
+        const product = await Product.find({
+            $or: [
+                {
+                    name: regex
+                },
+                {
+                    category: regex,
+                },
+                {
+                    sdescription: regex,
+                },
+            ],
+            
         })
         if (product === []) {
             res.status(403).send({
