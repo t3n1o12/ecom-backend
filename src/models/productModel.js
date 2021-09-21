@@ -1,6 +1,23 @@
 import mongoose from 'mongoose';
 
-
+const responseSchema = new  mongoose.Schema({
+    userId:{
+        type:String, 
+        
+    },
+    userName:{
+        type:String,
+        
+    },
+    userAva:{
+        type:String,
+        
+    },
+    userComment:{
+        type:String,
+       
+    }
+})
 
 const reviewShema = new mongoose.Schema({
     userId:{
@@ -23,6 +40,7 @@ const reviewShema = new mongoose.Schema({
         type:String,
        
     },
+    response:[responseSchema],
     disable:{
         type:Boolean,
       

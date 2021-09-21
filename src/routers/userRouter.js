@@ -178,7 +178,7 @@ userRouter.put('/:id', upload.single('userAva'), expressAsyncHandler(async (req,
 
 }))
 
-//gettt
+//gettt detail
 userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id)
     if (user) {
