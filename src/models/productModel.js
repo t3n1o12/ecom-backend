@@ -1,83 +1,72 @@
-import mongoose from 'mongoose';
-
-
+import mongoose from "mongoose";
 
 const reviewShema = new mongoose.Schema({
-    userId:{
-        type:String, 
-        
+  userId: {
+    type: String,
+  },
+  userName: {
+    type: String,
+  },
+  userAva: {
+    type: String,
+  },
+  rating: {
+    type: Number,
+  },
+  userComment: {
+    type: String,
+  },
+  disable: {
+    type: Boolean,
+  },
+});
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    userName:{
-        type:String,
-        
+    image: {
+      type: Array,
+      required: true,
     },
-    userAva:{
-        type:String,
-        
+    category: {
+      type: String,
     },
-    rating:{
-        type:Number,
-        
+    sdescription: {
+      type: String,
+      required: true,
     },
-    userComment:{
-        type:String,
-       
+    price: {
+      type: Number,
+      required: true,
     },
-    disable:{
-        type:Boolean,
-      
-    }
-})
-const productSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
+    countInStock: {
+      type: Number,
+      required: true,
     },
-    image:{
-        type:Array,
-        required:true,
+    review: [reviewShema],
+    numReviews: {
+      type: Number,
     },
-    category:{
-        type:String,
-        
+    userCreate: {
+      type: String,
     },
-    sdescription:{
-        type:String,
-        required:true
+    fearture: {
+      type: String,
     },
-    price:{
-        type:Number,
-        required:true,
-
+    sale: {
+      type: Number,
     },
-    countInStock:{
-        type:Number,
-        required:true,
+    description: {
+      type: String,
     },
-    review:[reviewShema],
-    numReviews:{
-        type:Number
+    color: {
+      type: String,
     },
-   userCreate:{
-       type:String,
-       
-   },
-   fearture:{
-       type:String,
-      
-   },
-   sale:{
-       type:Number
-   },
-   description:{
-       type:String,
-      
-   },
-   color:{
-       type:String
-   }
-},{timestamps:true})
-const Product = mongoose.model('Product', productSchema);
-
+  },
+  { timestamps: true }
+);
+const Product = mongoose.model("Product", productSchema);
 
 export default Product;
