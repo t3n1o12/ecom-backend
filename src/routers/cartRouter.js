@@ -25,9 +25,9 @@ cartRouter.post('/new', expressAsyncHandler(async (req, res) => {
 
 }))
 ///them vao gio hang
-cartRouter.put('/', expressAsyncHandler(async (req, res) => {
+cartRouter.post('/', expressAsyncHandler(async (req, res) => {
     const cart = await Cart.findOne({
-        userCart: req.body.userCart
+            
     })
 
     if (cart) {
@@ -66,7 +66,7 @@ cartRouter.post('/cart', expressAsyncHandler(async (req, res) => {
     }
 }));
 //delete
-cartRouter.put('/delete', expressAsyncHandler(async (req, res) => {
+cartRouter.delete('/delete', expressAsyncHandler(async (req, res) => {
     const cart = await Cart.findOne({
         userCart: req.body.userCart
     })

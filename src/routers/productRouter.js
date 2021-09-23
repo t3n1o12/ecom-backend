@@ -252,9 +252,11 @@ productRouter.post('/:id/comment/add', expressAsyncHandler(async (req, res) => {
 //delete comment
 productRouter.delete('/:id/comment/delete', expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
-    const reviewed = product.review.id(req.body.id)
+    const reviewed = product.review.id(req.query.id)
+    
     if (reviewed) {
-        product.review.id(req.body.id).remove();
+        product.review.id(req.query.id).userComment='';
+        product.review.id(req.query.id).response=[];
         product.save()
         res.send(product.review)
     } else {
@@ -275,4 +277,41 @@ productRouter.get('/:id/comment', expressAsyncHandler(async (req, res) => {
         })
     }
 }))
+///response 
+productRouter.post('/:id/response/add', expressAsyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    const response = product.review[req.body.stt].response;
+    if (response) {
+        response.push({
+            userId: req.body.userId,
+            userName: req.body.userName,
+            userAva: req.body.userAva,
+            userComment: req.body.userComment
+        })
+        await product.save();
+        res.send(response)
+    } else {
+        res.status(405).send({
+            message: 'review not created yet :v'
+        })
+
+    }
+
+}))
+//get, but not useful yet
+productRouter.get('/:id/response/stt', expressAsyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    const response = product.review[req.query.stt].response;
+    if (response) {
+        res.send(response)
+    } else {
+        res.status(405).send({
+            message: 'review not created yet :v'
+        })
+
+    }
+
+}))
+//delete
+
 export default productRouter;
