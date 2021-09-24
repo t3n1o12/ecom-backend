@@ -1,27 +1,4 @@
-<<<<<<< HEAD
 import mongoose from "mongoose";
-=======
-import mongoose from 'mongoose';
-
-const responseSchema = new  mongoose.Schema({
-    userId:{
-        type:String, 
-        
-    },
-    userName:{
-        type:String,
-        
-    },
-    userAva:{
-        type:String,
-        
-    },
-    userComment:{
-        type:String,
-       
-    }
-})
->>>>>>> b0fd171e45ef7676d818f610103eddb28166ec04
 
 const reviewShema = new mongoose.Schema({
   userId: {
@@ -64,22 +41,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-<<<<<<< HEAD
     countInStock: {
       type: Number,
       required: true,
-=======
-    response:[responseSchema],
-    disable:{
-        type:Boolean,
-      
-    }
-})
-const productSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
->>>>>>> b0fd171e45ef7676d818f610103eddb28166ec04
     },
     review: [reviewShema],
     numReviews: {
