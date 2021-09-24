@@ -41,47 +41,47 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
                     sdescription: regex,
                 },
             ],
-            userCreate:req.body.userCreate
+            userCreate: req.body.userCreate
         })
-        if(product){
+        if (product) {
             return res.send(product)
         }
-        else{
+        else {
             return res.status(404).send('Not found')
         }
     }
     if (req.body.category) {
         const product = await Product.find({
-            category:req.body.category,
-            userCreate:req.body.userCreate
+            category: req.body.category,
+            userCreate: req.body.userCreate
         })
-        if(product){
+        if (product) {
             return res.send(product)
         }
-        else{
+        else {
             return res.status(404).send('Not found')
         }
     }
     if (req.body.price) {
-        const product = await Product.find({ price: { $gte:req.body.price[0], $lte: req.body.price[1] },userCreate:req.body.userCreate })
-        if(product){
+        const product = await Product.find({ price: { $gte: req.body.price[0], $lte: req.body.price[1] }, userCreate: req.body.userCreate })
+        if (product) {
             return res.send(product)
         }
-        else{
+        else {
             return res.status(404).send('Not found')
         }
     }
     if (req.body.color) {
-        const product = await Product.find({ color:req.body.color,userCreate:req.body.userCreate })
-        if(product){
+        const product = await Product.find({ color: req.body.color, userCreate: req.body.userCreate })
+        if (product) {
             return res.send(product)
         }
-        else{
+        else {
             return res.status(404).send('Not found')
         }
     }
     //{ "$ne": req.body.userCreate }
-    const product = await Product.find({ "userCreate": req.body.userCreate }).limit(12).sort(req.body.sort ? { name: req.body.sort } : {createdAt:-1}).skip(req.body.skip ? req.body.skip : null);
+    const product = await Product.find({ "userCreate": req.body.userCreate }).limit(12).sort(req.body.sort ? { name: req.body.sort } : { createdAt: -1 }).skip(req.body.skip ? req.body.skip : null);
     if (product) {
         res.send(product)
     }
@@ -102,7 +102,7 @@ productRouter.post('/add', upload.array('image'), expressAsyncHandler(async (req
         sale: req.body.sale,
         fearture: req.body.fearture,
         description: req.body.description,
-        color:req.body.color
+        color: req.body.color
     })
     const createdProduct = await product.save();
     res.send(createdProduct)
@@ -139,7 +139,7 @@ productRouter.post('/search', expressAsyncHandler(async (req, res) => {
                     sdescription: regex,
                 },
             ],
-            userCreate:req.body.userCreate
+            userCreate: req.body.userCreate
         })
         if (product === []) {
             res.status(403).send({
@@ -173,7 +173,7 @@ productRouter.get('/header/search', expressAsyncHandler(async (req, res) => {
                     sdescription: regex,
                 },
             ],
-            
+
         })
         if (product === []) {
             res.status(403).send({
@@ -192,34 +192,34 @@ productRouter.get('/header/search', expressAsyncHandler(async (req, res) => {
 
 }))
 // edit a product
-productRouter.put('/:id/edit',upload.array('image'),expressAsyncHandler(async(req,res)=>{
+productRouter.put('/:id/edit', upload.array('image'), expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
-    if(product){
-        product.name = req.body.name?req.body.name:product.name;
-        product.category=req.body.category?req.body.category:product.category;
-        product.sdescription=req.body.sdescription?req.body.sdescription:product.sdescription;
-        product.price=req.body.price?req.body.price:product.price;
-        product.countInStock = req.body.countInStock?req.body.countInStock:product.countInStock;
-        product.fearture=req.body.fearture?req.body.fearture:product.fearture;
-        product.sale= req.body.sale?req.body.sale:product.sale;
-        product.description=req.body.description?req.body.description:product.description;
-        product.color=req.body.color?req.body.color:product.color;
-        product.image=req.files?req.files:product.image;
+    if (product) {
+        product.name = req.body.name ? req.body.name : product.name;
+        product.category = req.body.category ? req.body.category : product.category;
+        product.sdescription = req.body.sdescription ? req.body.sdescription : product.sdescription;
+        product.price = req.body.price ? req.body.price : product.price;
+        product.countInStock = req.body.countInStock ? req.body.countInStock : product.countInStock;
+        product.fearture = req.body.fearture ? req.body.fearture : product.fearture;
+        product.sale = req.body.sale ? req.body.sale : product.sale;
+        product.description = req.body.description ? req.body.description : product.description;
+        product.color = req.body.color ? req.body.color : product.color;
+        product.image = req.files ? req.files : product.image;
         const newProduct = await product.save();
         res.send(newProduct)
-    }else{
-        res.status(404).send({message:'not found product'})
+    } else {
+        res.status(404).send({ message: 'not found product' })
     }
-    
+
 }))
 
 //delet a product
-productRouter.delete('/:id',expressAsyncHandler(async(req,res)=>{
-     const product = await Product.findByIdAndRemove(req.params.id);
-    if(product){
-        res.send({message:'delete success'})
-    }else{
-        res.send({message:'delete fail'})
+productRouter.delete('/:id', expressAsyncHandler(async (req, res) => {
+    const product = await Product.findByIdAndRemove(req.params.id);
+    if (product) {
+        res.send({ message: 'delete success' })
+    } else {
+        res.send({ message: 'delete fail' })
     }
 }))
 //add rating for product 
@@ -253,10 +253,10 @@ productRouter.post('/:id/comment/add', expressAsyncHandler(async (req, res) => {
 productRouter.delete('/:id/comment/delete', expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
     const reviewed = product.review.id(req.query.id)
-    
+
     if (reviewed) {
-        product.review.id(req.query.id).userComment='';
-        product.review.id(req.query.id).response=[];
+        product.review.id(req.query.id).userComment = '';
+        product.review.id(req.query.id).response = [];
         product.save()
         res.send(product.review)
     } else {
