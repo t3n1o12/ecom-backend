@@ -9,6 +9,7 @@ const customerSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     verified_email: { type: Boolean, default: true },
     addresses: [
+
       {
         addresses1: { type: String, required: true },
         city: { type: String, required: true },
@@ -16,7 +17,7 @@ const customerSchema = new mongoose.Schema(
         zip: { type: Number, required: true },
         country_name: { type: String, required: true },
       },
-    ],
+    ]
   },
 
   { timestamps: true }
