@@ -230,6 +230,7 @@ productRouter.delete('/:id', expressAsyncHandler(async (req, res) => {
 productRouter.post('/:id/comment/add', expressAsyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
     const review = product.review;
+   
     if (review) {
         review.push({
             userId: req.body.userId,

@@ -1,25 +1,51 @@
 import mongoose from "mongoose";
 
+const responseSchema = new  mongoose.Schema({
+  userId:{
+      type:String, 
+      
+  },
+  userName:{
+      type:String,
+      
+  },
+  userAva:{
+      type:String,
+      
+  },
+  userComment:{
+      type:String,
+     
+  }
+})
+
 const reviewShema = new mongoose.Schema({
-  userId: {
-    type: String,
+  userId:{
+      type:String, 
+      
   },
-  userName: {
-    type: String,
+  userName:{
+      type:String,
+      
   },
-  userAva: {
-    type: String,
+  userAva:{
+      type:String,
+      
   },
-  rating: {
-    type: Number,
+  rating:{
+      type:Number,
+      
   },
-  userComment: {
-    type: String,
+  userComment:{
+      type:String,
+     
   },
-  disable: {
-    type: Boolean,
-  },
-});
+  response:[responseSchema],
+  disable:{
+      type:Boolean,
+    
+  }
+})
 const productSchema = new mongoose.Schema(
   {
     name: {
