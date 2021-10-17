@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cartRouter from "./routers/cartRouter.js";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
-// import orderRouter from "./routers/orderRouter.js";
+import orderRouter from "./routers/orderRouter.js";
 import customerRouter from "./routers/customerRouter.js";
 import morgan from "morgan";
 
@@ -27,7 +27,7 @@ app.use("/api/users", userRouter);
 // dung productRouter
 app.use("/api/products", productRouter);
 //cart
-app.use("/api/carts", cartRouter);
+app.use("/api/order", orderRouter);
 //order
 // app.use("/api/orders", orderRouter);
 //customer
