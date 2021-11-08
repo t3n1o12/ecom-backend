@@ -1,45 +1,44 @@
 import mongoose from "mongoose";
-import Category from "./categoryModel";
 
-const responseSchema = new  mongoose.Schema({
-  userId:{
-      type:String, 
-      
+const responseSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+
   },
-  userName:{
-      type:String,
-      
+  userName: {
+    type: String,
+
   },
-  userAva:{
-      type:String,
-      
+  userAva: {
+    type: String,
+
   },
-  userComment:{
-      type:String,
-     
+  userComment: {
+    type: String,
+
   }
 })
 
 const reviewShema = new mongoose.Schema({
-  userId:{
-      type:String, 
-      
+  userId: {
+    type: String,
+
   },
-  userName:{
-      type:String,
-      
+  userName: {
+    type: String,
+
   },
-  userAva:{
-      type:String,
-      
+  userAva: {
+    type: String,
+
   },
-  rating:{
-      type:Number,
-      
+  rating: {
+    type: Number,
+
   },
-  userComment:{
-      type:String,
-     
+  userComment: {
+    type: String,
+
   },
 });
 const variantSchema = new mongoose.Schema({
@@ -93,7 +92,10 @@ const productSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
-    category: [Category],
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
     description: {
       type: String,
     },

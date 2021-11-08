@@ -1,26 +1,21 @@
 import mongoose from "mongoose";
 
-const categorySchema = mongoose.Schema({
-    name :{
-        type : String,
-        trim:true,
-        require: true
-    },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
-      },
-      parentId: {
-        type: String,
-      },
-      // createdBy: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: "User",
-      //   required: true,
-      // },
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    trim: true,
+    require: true
+  },
+  slug: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  parentId: {
+    type: String,
+  }
 }, {
-    timestamps: true
+  timestamps: true
 });
 
 const Category = mongoose.model("Category", categorySchema)
