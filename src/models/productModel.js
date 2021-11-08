@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Category from "./categoryModel";
 
 const reviewShema = new mongoose.Schema({
   userId: {
@@ -20,8 +21,49 @@ const reviewShema = new mongoose.Schema({
     type: Boolean,
   },
 });
+const variantSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    require: true
+  },
+  sku: {
+    type: String,
+    require: true
+  },
+  //size
+  option1: {
+    type: String,
+    require: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  //color?
+  option2: {
+    type: String,
+    default: null
+  },
+  weight: {
+    type: Number,
+    required: true,
+  },
+  width: {
+    type: Number,
+    required: true,
+  },
+  height: {
+    type: Number,
+    required: true,
+  },
+  inventoryQly: {
+    type: Number,
+    required: true,
+  }
+})
 const productSchema = new mongoose.Schema(
   {
+
     name: {
       type: String,
       required: true,
@@ -30,20 +72,35 @@ const productSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
-    category: {
+    category: [Category],
+    description: {
       type: String,
     },
-    sdescription: {
+
+    brand: {
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
+    sex: {
+      type: String,
+      enum: ["unisex", "male", "female"],
+      default: "unisex",
+
     },
-    countInStock: {
-      type: Number,
-      required: true,
+    origin: {
+
+      type: String,
+      enum: ["Viet Nam", "Thai Lan", "Korea", "Japan", "USA", "another"],
+      required: true
+    },
+    material: {
+      type: String,
+      require: true
+    },
+    sellInfor: {
+      variants: [
+        variantSchema
+      ]
     },
     review: [reviewShema],
     numReviews: {
@@ -57,13 +114,7 @@ const productSchema = new mongoose.Schema(
     },
     sale: {
       type: Number,
-    },
-    description: {
-      type: String,
-    },
-    color: {
-      type: String,
-    },
+    }
   },
   { timestamps: true }
 );

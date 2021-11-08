@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cartRouter from "./routers/cartRouter.js";
 import productRouter from "./routers/productRouter.js";
+import categoryRouter from "./routers/categoryRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
 import customerRouter from "./routers/customerRouter.js";
@@ -26,6 +27,8 @@ app.use("/upload", express.static("upload"));
 app.use("/api/users", userRouter);
 // dung productRouter
 app.use("/api/products", productRouter);
+//Category
+app.use("/api/categories", categoryRouter);
 //cart
 app.use("/api/order", orderRouter);
 //order
