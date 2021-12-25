@@ -38,7 +38,7 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
                     category: regex,
                 },
                 {
-                    sdescription: regex,
+                    description: regex,
                 },
             ],
             userCreate: req.body.userCreate
@@ -91,19 +91,14 @@ productRouter.post('/list', expressAsyncHandler(async (req, res) => {
 }))
 //add product
 productRouter.post('/add', upload.array('image'), expressAsyncHandler(async (req, res) => {
-    const product = new Product({
-        name: req.body.name,
-        category: req.body.category,
-        sdescription: req.body.sdescription,
-        price: req.body.price,
-        countInStock: req.body.countInStock,
-        image: req.files,
-        userCreate: req.body.userCreate,
-        sale: req.body.sale,
-        fearture: req.body.fearture,
-        description: req.body.description,
-        color: req.body.color
-    })
+    const {
+        name, image, category, description, 
+        brand, sex, origin, material, sellInfor, 
+        review, userCreate,fearture,sale
+    } = req.body;
+    const product = new Product(
+        req.body
+    )
     const createdProduct = await product.save();
     res.send(createdProduct)
 
@@ -136,7 +131,7 @@ productRouter.post('/search', expressAsyncHandler(async (req, res) => {
                     category: regex,
                 },
                 {
-                    sdescription: regex,
+                    description: regex,
                 },
             ],
             userCreate: req.body.userCreate
@@ -197,13 +192,15 @@ productRouter.put('/:id/edit', upload.array('image'), expressAsyncHandler(async 
     if (product) {
         product.name = req.body.name ? req.body.name : product.name;
         product.category = req.body.category ? req.body.category : product.category;
-        product.sdescription = req.body.sdescription ? req.body.sdescription : product.sdescription;
-        product.price = req.body.price ? req.body.price : product.price;
-        product.countInStock = req.body.countInStock ? req.body.countInStock : product.countInStock;
+        product.userCreate = req.body.userCreate ? req.body.userCreate : product.userCreate;
+        product.description = req.body.description ? req.body.description : product.description;
+        product.origin = req.body.origin ? req.body.origin : product.origin;
+        product.material = req.body.material ? req.body.material : product.material;
+        product.sellInfor = req.body.sellInfor ? req.body.sellInfor : product.sellInfor;
+        product.variants = req.body.variants ? req.body.variants : product.variants;
+        product.numReviews = req.body.numReviews ? req.body.numReviews : product.numReviews;
         product.fearture = req.body.fearture ? req.body.fearture : product.fearture;
         product.sale = req.body.sale ? req.body.sale : product.sale;
-        product.description = req.body.description ? req.body.description : product.description;
-        product.color = req.body.color ? req.body.color : product.color;
         product.image = req.files ? req.files : product.image;
         const newProduct = await product.save();
         res.send(newProduct)
