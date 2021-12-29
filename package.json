@@ -11,8 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
+=======
+    "actions-on-google": "^2.6.0",
+    "body-parser": "^1.18.3",
+    "dialogflow": "^0.8.2",
+    "dialogflow-fulfillment": "^0.6.1",
+>>>>>>> 3fa2ada730174bfc59ca72022054dce62e04b580
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-validator": "^6.13.0",

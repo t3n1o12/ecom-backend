@@ -13,6 +13,7 @@ import conversationRouter from "./routers/conversationRouter.js";
 import messageRouter from "./routers/messageRouter.js";
 import { Server, Socket } from "socket.io";
 import http from 'http';
+import dialogflowRouter from "./routers/dialogflowRouter.js";
 
 const app = express();
 
@@ -100,7 +101,7 @@ app.use("/api/customers", customerRouter);
 //chat
 app.use("/api/conversation", conversationRouter)
 app.use("/api/message", messageRouter)
-
+app.use("/api/bot",dialogflowRouter)
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
