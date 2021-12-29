@@ -88,13 +88,17 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: Array,
-      required: true,
-    },
+    // image: {
+    //   type: Array,
+    //   required: true,
+    // },
+    productPicture: [
+      { img: { type: String } }
+    ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
+      required: true
     },
     description: {
       type: String,
@@ -120,24 +124,26 @@ const productSchema = new mongoose.Schema(
       type: String,
       require: true
     },
-    sellInfor: {
-      variants: [
-        variantSchema
-      ]
-    },
+    variant: [
+      variantSchema
+    ],
     review: [reviewShema],
     numReviews: {
       type: Number,
     },
-    userCreate: {
-      type: String,
-    },
+    // userCreate: {
+    //   type: String,
+    // },
     fearture: {
       type: String,
     },
     sale: {
       type: Number,
-    }
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId, ref: "User",
+      required: true
+    },
   },
   { timestamps: true }
 );

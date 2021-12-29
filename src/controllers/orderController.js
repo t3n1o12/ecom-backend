@@ -5,8 +5,8 @@ import Order from "../models/orderModel"
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
-    payablePrice, purchasedQty, shippingAddress, customer, totalAmount,
-    taxPrice, discounts, totalPrice, paymentMethod
+    payablePrice, purchasedQty, shippingAddress, customer,
+    items, taxPrice, discounts, paymentMethod, isDelivered, isPaid,totalPrice,totalAmount
   } = req.body
   req.body.orderStatus = [
     {
@@ -27,9 +27,13 @@ const createOrder = asyncHandler(async (req, res) => {
       isCompleted: false,
     },
   ];
+  req.body.totalPrice = parseInt(items.payablePrice) * parseInt(items.purchasedQty)
+ 
+  req.body.totalAmount= taxPrice *  req.body.totalPrice +  req.body.totalPrice - discounts;
+  console.log(taxPrice, totalPrice, discounts)
 
-  if ( !shippingAddress || !customer || !totalAmount
-    || !totalPrice || !taxPrice ) {
+
+  if (!shippingAddress || !customer || !taxPrice) {
     res.status(400);
     throw new Error("Please Fill all the fields");
 
@@ -39,6 +43,8 @@ const createOrder = asyncHandler(async (req, res) => {
     order.save((error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
+        const { payablePrice, purchasedQty, shippingAddress, customer,
+          taxPrice, discounts, paymentMethod } = order
         res.status(201).json({ order });
       }
     });
@@ -46,4 +52,16 @@ const createOrder = asyncHandler(async (req, res) => {
 
 })
 
-export {createOrder}
+const getOrders = (req, res) => {
+  Order.find({ user: req.user._id })
+    .select("_id paymentStatus paymentType orderStatus items")
+    .populate("items.productId", "_id name productPictures")
+    .exec((error, orders) => {
+      if (error) return res.status(400).json({ error });
+      if (orders) {
+        res.status(200).json({ orders });
+      }
+    });
+};
+
+export { createOrder, getOrders }

@@ -16,6 +16,11 @@ const customerSchema = mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   verified_email: { type: Boolean, default: true },
+  customerID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
+    required: true,
+  },
 })
 const orderSchema = new mongoose.Schema(
   {
@@ -53,7 +58,16 @@ const orderSchema = new mongoose.Schema(
     ],
     shippingAddress: [shippingAddressSchema],
     customer: [customerSchema],
-    paymentMethod: { type: String, required: true },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "completed", "cancelled", "refund"],
+      required: true,
+    },
+    paymentType: {
+      type: String,
+      enum: ["cod", "card"],
+      required: true,
+    },
     totalAmount: {
       type: Number,
       required: true,
@@ -63,12 +77,22 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true },
     // user: { type: mongoose.Schema.types.Object, ref: "User", required: true },
     isPaid: { type: Boolean, required: true },
-    paidAt: { type: String, required: true },
+    // paidAt: { type: String, required: true },
     isDelivered: { type: Boolean, required: true },
     // deliveredAt: { type: Date },
   },
   { timestamps: true }
 );
+orderSchema.set('toJSON', {
+  virtuals: true
+});
+// orderSchema.virtual("totalPrice").get(function () {
+//    const price= this.items[0].payablePrice * this.items[0].purchasedQty ;
+//   return price;
+// });
+// orderSchema.virtual("totalAmount").get(function () {
+//   return this.taxPrice * this.totalPrice + this.totalPrice - this.discounts;
+// });
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;

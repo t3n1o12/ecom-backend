@@ -1,78 +1,107 @@
-import mongoose from "mongoose";
+/** @format */
 
-const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+
+const userSchema = new mongoose.Schema(
+  {
     userName: {
-        type: String
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
     },
-    password: {
-        type: String,
-        required: true
+    password_hash: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+      min: 1,
+      max: 20,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+      min: 1,
+      max: 20,
     },
     userAva: {
-        type: String
+      type: String,
     },
     birth: {
-        type: String
+      type: String,
     },
     sex: {
-        type: String
+      type: String,
     },
     role: {
-        type: String
+      type: String,
     },
     status: {
-        type: String
+      type: String,
     },
     department: {
-        type: String
+      type: String,
     },
     phone: {
-        type: String
+      type: String,
     },
     website: {
-        type: String
+      type: String,
     },
     addressline1: {
-        type: String
+      type: String,
     },
     addressline2: {
-        type: String
+      type: String,
     },
     city: {
-        type: String
+      type: String,
     },
     country: {
-        type: String
+      type: String,
     },
     language: {
-        type: String
+      type: String,
     },
     postcode: {
-        type: String
+      type: String,
     },
     twiter: {
-        type: String
+      type: String,
     },
     facebook: {
-        type: String
+      type: String,
     },
     instagram: {
-        type: String
+      type: String,
     },
     zalo: {
-        type: String
-    }
+      type: String,
+    },
+  },
+  {timestamps: true}
+);
+userSchema.virtual('fullName').get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
 
-
-}, { timestamps: true })
-const User = mongoose.model("User", userSchema);
+userSchema.methods = {
+  authenticate: async function (password) {
+    return await bcrypt.compare(password, this.password_hash);
+  },
+};
+const User = mongoose.model('User', userSchema);
 export default User;
